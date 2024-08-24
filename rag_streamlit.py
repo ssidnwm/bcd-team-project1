@@ -19,13 +19,26 @@ from langchain.vectorstores import FAISS
 from langchain.callbacks import get_openai_callback
 from langchain.memory import StreamlitChatMessageHistory
 
+# code related logo
+Hyundai_logo = "images/Hyundai_logo.png"
+horizontal_logo = "images/Hyundai_logo_horizen.png"
+
 def main():
     st.set_page_config(
-        page_title="DirChat",
-        page_icon=":books:"
+        page_title="Hyundai Motor Company - Motor Vehicle Law ",
+        page_icon=Hyundai_logo
     )
 
-    st.title("_Private Data :red[QA Chat]_ :books:")
+    st.title("_:blue[Hyundai Motor]_ - Motor Vehicle Law Data :blue[QA Chatbot] :scales:")
+    st.markdown("Hyundai Motor Company & Handong Grobal University")
+    
+    # sidebar
+    st.logo(
+        horizontal_logo,
+        icon_image=Hyundai_logo
+    )
+    st.sidebar.markdown("Place your legal documents in the space in the sidebar. Enter your OpenAI API Key below it and press Process!")
+
 
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
@@ -51,9 +64,10 @@ def main():
 
         st.session_state.conversation = get_conversation_chain(vectorstore, openai_api_key)
         st.session_state.processComplete = True
+        
 
     if 'messages' not in st.session_state:
-        st.session_state['messages'] = [{"role": "assistant", "content": "안녕하세요! 주어진 문서에 대해 궁금하신 것이 있으면 언제든 물어봐주세요!"}]
+        st.session_state['messages'] = [{"role": "assistant", "content": "Hi! If you have any questions about a given legal document, feel free to ask!"}]
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
@@ -62,7 +76,7 @@ def main():
     history = StreamlitChatMessageHistory(key="chat_messages")
 
     # Chat logic
-    if query := st.chat_input("질문을 입력해주세요."):
+    if query := st.chat_input("Please enter your question."):
         st.session_state.messages.append({"role": "user", "content": query})
 
         with st.chat_message("user"):
